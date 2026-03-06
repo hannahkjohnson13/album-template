@@ -1,1 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Album</title>
 
+<style>
+body{
+margin:0;
+font-family:sans-serif;
+background:#ffffff;
+}
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:12px;
+padding:12px;
+}
+
+img{
+width:100%;
+height:auto;
+border-radius:8px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="gallery" id="gallery"></div>
+
+<script>
+const user = window.location.hostname.split(".")[0];
+const repo = window.location.pathname.split("/")[1];
+
+fetch(`https://api.github.com/repos/${user}/${repo}/contents`)
+.then(r=>r.json())
+.then(files=>{
+
+files
+.filter(file => file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))
+.forEach(file=>{
+
+let img=document.createElement("img");
+img.src=file.download_url;
+
+document.getElementById("gallery").appendChild(img);
+
+});
+
+});
+</script>
+
+</body>
+</html>
